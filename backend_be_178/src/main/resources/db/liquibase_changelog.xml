@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <property name="schemaName" value="be"></property>
+    <property name="author=" value="db-designer"></property>
+    <changeSet id="v1-01-01" author="${author}">
+    
+ <createTable schemaName="${schemaName}" tableName="FundingRound">
+	<column name="RoundId" type="SERIAL" autoIncrement="true" >
+        <constraints nullable="false" primaryKey="true"/>
+    </column>
+ 	<column name="RoundType" type="INTEGER" />
+   
+     <column name="DateOfFunding" type="DATE" />
+    
+     <column name="AmountRaised" type="DECIMAL" />
+    
+ 	<column name="Status" type="INTEGER" />
+   
+     <column name="TargetAmount" type="DECIMAL" />
+    
+     <column name="PostValuation" type="DECIMAL" />
+    
+ 	
+</createTable>
+ <createTable schemaName="${schemaName}" tableName="Stage">
+	<column name="StageId" type="SERIAL" autoIncrement="true" >
+        <constraints nullable="false" primaryKey="true"/>
+    </column>
+ 	<column name="Name" type="INTEGER" />
+   
+     <column name="Description" type="VARCHAR(250)" />
+    
+     <column name="CriteriaForNextStage" type="VARCHAR(250)" />
+    
+ 	
+</createTable>
+ <createTable schemaName="${schemaName}" tableName="Document">
+	<column name="DocId" type="SERIAL" autoIncrement="true" >
+        <constraints nullable="false" primaryKey="true"/>
+    </column>
+     <column name="Name" type="VARCHAR(250)" />
+    
+     <column name="Type" type="VARCHAR(250)" />
+    
+     <column name="Description" type="VARCHAR(250)" />
+    
+     <column name="Date" type="DATE" />
+    
+ 	<column name="Content" type="BINARY"/>
+	<column name="DocFileType" type="VARCHAR(100)"/>
+	
+</createTable>
+ <createTable schemaName="${schemaName}" tableName="Investor">
+	<column name="InvestorId" type="SERIAL" autoIncrement="true" >
+        <constraints nullable="false" primaryKey="true"/>
+    </column>
+     <column name="Name" type="VARCHAR(250)" />
+    
+     <column name="ContactNumber" type="VARCHAR(250)" />
+    
+     <column name="PortfolioSize" type="VARCHAR(250)" />
+    
+  	
+</createTable>
+ <createTable schemaName="${schemaName}" tableName="Founder">
+	<column name="FId" type="SERIAL" autoIncrement="true" >
+        <constraints nullable="false" primaryKey="true"/>
+    </column>
+     <column name="Name" type="VARCHAR(250)" />
+    
+     <column name="Role" type="VARCHAR(250)" />
+    
+     <column name="Bio" type="VARCHAR(250)" />
+    
+     <column name="ContactNumber" type="VARCHAR(250)" />
+    
+     <column name="LinkedInProfile" type="VARCHAR(250)" />
+    
+ 	
+</createTable>
+ <createTable schemaName="${schemaName}" tableName="Startup">
+	<column name="SId" type="SERIAL" autoIncrement="true" >
+        <constraints nullable="false" primaryKey="true"/>
+    </column>
+     <column name="Name" type="VARCHAR(250)" />
+    
+     <column name="Industry" type="VARCHAR(250)" />
+    
+     <column name="FoundingDate" type="DATE" />
+    
+     <column name="FundingReceived" type="DECIMAL" />
+    
+     <column name="ContactNumber" type="VARCHAR(250)" />
+    
+     <column name="Valuation" type="DECIMAL" />
+    
+  	
+</createTable>
+	
+  <createTable schemaName="${schemaName}" tableName="StartupFounders">
+	<column name="Id" type="SERIAL" autoIncrement="true">
+		<constraints primaryKey="true" nullable="false"/>
+	</column>
+	<column name="SId" type="INTEGER" />
+	<column name="FId" type="INTEGER" />
+</createTable>
+  <createTable schemaName="${schemaName}" tableName="StartupKeyMetrics">
+	<column name="Id" type="SERIAL" autoIncrement="true">
+		<constraints primaryKey="true" nullable="false"/>
+	</column>
+	<column name="SId" type="INTEGER" />
+	<column name="KeyMetrics" type="VARCHAR(250)" />
+</createTable>
+  <createTable schemaName="${schemaName}" tableName="InvestorInvestmentPreferences">
+	<column name="Id" type="SERIAL" autoIncrement="true">
+		<constraints primaryKey="true" nullable="false"/>
+	</column>
+	<column name="InvestorId" type="INTEGER" />
+	<column name="InvestmentPreferences" type="VARCHAR(250)" />
+</createTable>
+  <createTable schemaName="${schemaName}" tableName="StartupPreviousRounds">
+	<column name="Id" type="SERIAL" autoIncrement="true">
+		<constraints primaryKey="true" nullable="false"/>
+	</column>
+	<column name="SId" type="INTEGER" />
+	<column name="RoundId" type="INTEGER" />
+</createTable>
+  <createTable schemaName="${schemaName}" tableName="FundingRoundInvestors">
+	<column name="Id" type="SERIAL" autoIncrement="true">
+		<constraints primaryKey="true" nullable="false"/>
+	</column>
+	<column name="RoundId" type="INTEGER" />
+	<column name="InvestorId" type="INTEGER" />
+</createTable>
+
+ 
+	<addForeignKeyConstraint baseTableName="StartupFounders" baseTableSchemaName="${schemaName}"  baseColumnNames="SId" constraintName="Founder_SId_fk"
+	                                  referencedTableName="Startup" referencedTableSchemaName="${schemaName}" referencedColumnNames="SId"/>
+	                                  
+	<addForeignKeyConstraint baseTableName="StartupFounders" baseTableSchemaName="${schemaName}"  baseColumnNames="FId" constraintName="Founder_FId_fk"
+	                                  referencedTableName="Founder" referencedTableSchemaName="${schemaName}" referencedColumnNames="FId"/>
+ 
+ 
+	<addForeignKeyConstraint baseTableSchemaName="${schemaName}" baseTableName="StartupKeyMetrics" baseColumnNames="SId" constraintName="Startup_StartupKeyMetrics_fk" referencedTableName="Startup"
+                                 	referencedColumnNames="SId" referencedTableSchemaName="${schemaName}"/>
+ 
+ 
+	<addForeignKeyConstraint baseTableSchemaName="${schemaName}" baseTableName="InvestorInvestmentPreferences" baseColumnNames="InvestorId" constraintName="Investor_InvestorInvestmentPreferences_fk" referencedTableName="Investor"
+                                 	referencedColumnNames="InvestorId" referencedTableSchemaName="${schemaName}"/>
+ 
+ 
+	<addForeignKeyConstraint baseTableName="StartupPreviousRounds" baseTableSchemaName="${schemaName}"  baseColumnNames="SId" constraintName="FundingRound_SId_fk"
+	                                  referencedTableName="Startup" referencedTableSchemaName="${schemaName}" referencedColumnNames="SId"/>
+	                                  
+	<addForeignKeyConstraint baseTableName="StartupPreviousRounds" baseTableSchemaName="${schemaName}"  baseColumnNames="RoundId" constraintName="FundingRound_RoundId_fk"
+	                                  referencedTableName="FundingRound" referencedTableSchemaName="${schemaName}" referencedColumnNames="RoundId"/>
+ 
+ 
+	<addForeignKeyConstraint baseTableName="FundingRoundInvestors" baseTableSchemaName="${schemaName}"  baseColumnNames="RoundId" constraintName="Investor_RoundId_fk"
+	                                  referencedTableName="FundingRound" referencedTableSchemaName="${schemaName}" referencedColumnNames="RoundId"/>
+	                                  
+	<addForeignKeyConstraint baseTableName="FundingRoundInvestors" baseTableSchemaName="${schemaName}"  baseColumnNames="InvestorId" constraintName="Investor_InvestorId_fk"
+	                                  referencedTableName="Investor" referencedTableSchemaName="${schemaName}" referencedColumnNames="InvestorId"/>
+ 
+	
+ 
+	<addColumn tableName="FundingRound" schemaName="${schemaName}">
+	    <column name="FundingRoundLeadInvestor" type="INTEGER"/>
+	</addColumn>
+	<addForeignKeyConstraint baseTableName="FundingRound" baseColumnNames="FundingRoundLeadInvestor" baseTableSchemaName="${schemaName}" constraintName="FundingRound_LeadInvestor_fk" referencedTableName="Investor"
+	                                 referencedColumnNames="InvestorId" referencedTableSchemaName="${schemaName}"/>
+ 
+
+	<addColumn tableName="FundingRound" schemaName="${schemaName}">
+	    <column name="FundingRoundFundedStartup" type="INTEGER"/>
+	</addColumn>
+	<addForeignKeyConstraint baseTableName="FundingRound" baseColumnNames="FundingRoundFundedStartup" baseTableSchemaName="${schemaName}" constraintName="FundingRound_FundedStartup_fk" referencedTableName="Startup"
+	                                 referencedColumnNames="SId" referencedTableSchemaName="${schemaName}"/>
+ 
+
+	<addColumn tableName="FundingRound" schemaName="${schemaName}">
+	    <column name="FundingRoundStartupLogoIcon" type="INTEGER"/>
+	</addColumn>
+	<addForeignKeyConstraint baseTableName="FundingRound" baseColumnNames="FundingRoundStartupLogoIcon" baseTableSchemaName="${schemaName}" constraintName="FundingRound_StartupLogoIcon_fk" referencedTableName="Document"
+	                                 referencedColumnNames="DocId" referencedTableSchemaName="${schemaName}"/>
+ 
+     
+	<addColumn tableName="Startup" schemaName="${schemaName}">
+	    <column name="StartupCurrentStage" type="INTEGER"/>
+	</addColumn>
+	<addForeignKeyConstraint baseTableName="Startup" baseColumnNames="StartupCurrentStage" baseTableSchemaName="${schemaName}" constraintName="Startup_CurrentStage_fk" referencedTableName="Stage"
+	                                 referencedColumnNames="StageId" referencedTableSchemaName="${schemaName}"/>
+ 
+
+	<addColumn tableName="Startup" schemaName="${schemaName}">
+	    <column name="StartupLogo" type="INTEGER"/>
+	</addColumn>
+	<addForeignKeyConstraint baseTableName="Startup" baseColumnNames="StartupLogo" baseTableSchemaName="${schemaName}" constraintName="Startup_Logo_fk" referencedTableName="Document"
+	                                 referencedColumnNames="DocId" referencedTableSchemaName="${schemaName}"/>
+ 
+	    </changeSet>
+</databaseChangeLog>
